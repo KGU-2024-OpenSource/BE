@@ -17,12 +17,12 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     properties:
       hibernate:
-        format_sql: true # SQL ???
-        highlight_sql: true # ANSI ??? ?? ???
-        use_sql_comments: true # SQL ??? /* */ ?? ??
+        format_sql: true # SQL 포맷팅
+        highlight_sql: true # ANSI 코드에 색을 나타냄
+        use_sql_comments: true # SQL 내부에 /* */ 주석 추가
 
 
-# Swagger ?? ??
+# Swagger 설정 추가
 springdoc:
   show-login-endpoint: true
   swagger-ui:
