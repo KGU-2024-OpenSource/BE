@@ -1,6 +1,6 @@
-package com.be_provocation.handler;
+package com.be_provocation.global.handler;
 
-import com.be_provocation.exception.CheckmateException;
+import com.be_provocation.global.exception.CheckmateException;
 import com.be_provocation.global.dto.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ExceptionHandler;

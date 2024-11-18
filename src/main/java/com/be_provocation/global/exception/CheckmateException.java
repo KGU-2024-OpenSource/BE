@@ -1,4 +1,4 @@
-package com.be_provocation.exception;
+package com.be_provocation.global.exception;
 
 import lombok.Getter;
 
