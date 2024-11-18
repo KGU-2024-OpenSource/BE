@@ -1,5 +1,8 @@
 package com.be_provocation.exception;
 
+import lombok.Getter;
+
+@Getter
 public class CheckmateException extends RuntimeException{
     private final ErrorCode errorCode;
     private String message;
