@@ -26,6 +26,7 @@ public class FilterExceptionHandler extends OncePerRequestFilter {
             createAPIResponse(response, ex.getErrorCode());
         } catch (Exception ex) {
             // 기타 예외 처리
+            ex.printStackTrace();
             createAPIResponse(response, ErrorCode.INTERNAL_SEVER_ERROR);
         }
     }

@@ -1,5 +1,6 @@
 package com.be_provocation.auth.service;
 
+import com.be_provocation.auth.dto.request.LoginRequest;
 import com.be_provocation.auth.dto.request.SignUpRequest;
 import com.be_provocation.global.exception.CheckmateException;
 import com.be_provocation.global.exception.ErrorCode;
@@ -40,6 +41,20 @@ public class AuthService {
         Member member = request.toEntity(encodedPassword, profileImageUrl);
 
         memberRepository.save(member);
+    }
+
+    @Transactional(readOnly = true)
+    public void login(LoginRequest request, HttpServletResponse response) {
+
+        String email = request.email();
+        String password = request.password();
+
+
+        if (!isMemberRegistered(email)) {
+            throw CheckmateException.from(ErrorCode.ACCOUNT_USERNAME_EXIST);
+        }
+
+        generateToken(email, password, response);
 
     }
 
@@ -48,11 +63,11 @@ public class AuthService {
     }
 
 
-    private void generateToken(String loginId, HttpServletResponse response) {
+    private void generateToken(String email, String password, HttpServletResponse response) {
         // 1. username + password 를 기반으로 Authentication 객체 생성
         // 이때 authentication 은 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginId, "default");
+                new UsernamePasswordAuthenticationToken(email, password);
 
         // 2. 실제 검증. authenticate() 메서드를 통해 요청된 Member 에 대한 검증 진행
         // authenticate 메서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드 실행
