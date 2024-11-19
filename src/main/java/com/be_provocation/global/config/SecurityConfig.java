@@ -2,6 +2,7 @@ package com.be_provocation.global.config;
 
 import com.be_provocation.auth.filter.JwtAuthenticationFilter;
 import com.be_provocation.auth.service.JwtTokenService;
+import com.be_provocation.global.filter.FilterExceptionHandler;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,8 @@ public class SecurityConfig {
                                 //.requestMatchers("/members/test").hasRole("USER")
                                 // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                                 .anyRequest().authenticated())
+                //모든 필터에서 발생하는 예외는 FilterExceptionHandler에 의해 먼저 처리
+                .addFilterBefore(new FilterExceptionHandler(), UsernamePasswordAuthenticationFilter.class)
                 // JWT 인증을 위하여 직접 구현한 필터를 UsernamePasswordAuthenticationFilter 전에 실행
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenService), UsernamePasswordAuthenticationFilter.class)
                 .build();
