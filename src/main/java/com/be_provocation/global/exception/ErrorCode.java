@@ -52,5 +52,13 @@ public enum ErrorCode {
     private final HttpStatus status;
     private final String message;
 
-
+    // 메시지를 기반으로 ErrorCode를 찾는 정적 메서드
+    public static ErrorCode fromMessage(String message) {
+        for (ErrorCode errorCode : ErrorCode.values()) {
+            if (errorCode.getMessage().equals(message)) {
+                return errorCode;
+            }
+        }
+        throw CheckmateException.from(ErrorCode.INTERNAL_SEVER_ERROR);
+    }
 }
