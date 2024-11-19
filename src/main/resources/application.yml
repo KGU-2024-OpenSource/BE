@@ -1,3 +1,6 @@
+server:
+  port: 7070
+
 spring:
   # .env import
   config:
