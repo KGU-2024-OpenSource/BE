@@ -42,6 +42,8 @@ public class Member extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private String profileImageUrl;
+
     @Default
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER; //단일 역할만 가능
