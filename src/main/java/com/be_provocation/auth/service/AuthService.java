@@ -1,5 +1,6 @@
 package com.be_provocation.auth.service;
 
+import com.be_provocation.auth.domain.ProfileNumber;
 import com.be_provocation.auth.dto.request.LoginRequest;
 import com.be_provocation.auth.dto.request.SignUpRequest;
 import com.be_provocation.global.exception.CheckmateException;
@@ -28,7 +29,7 @@ public class AuthService {
 
         String email = request.email();
         String password = request.password();
-        int index = request.profileImageIndex();
+        ProfileNumber profileNumber = request.profileNumber();
 
         String profileImageUrl = null; // 인덱스에 따른 이미지 링크 추가
 

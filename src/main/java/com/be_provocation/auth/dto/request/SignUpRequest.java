@@ -1,15 +1,16 @@
 package com.be_provocation.auth.dto.request;
 
+import com.be_provocation.auth.domain.ProfileNumber;
 import com.be_provocation.member.domain.Gender;
 import com.be_provocation.member.domain.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 public record SignUpRequest(
         @NotBlank(message = "이메일은 필수입니다.")
-        @Email(message = "유효한 이메일 형식이어야 합니다.")
         @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@kyonggi\\.ac\\.kr$",
                 message = "이메일은 @kyonggi.ac.kr로 끝나야 합니다.")
         String email,
@@ -22,10 +23,11 @@ public record SignUpRequest(
         @NotBlank(message = "닉네임은 필수입니다.")
         String nickname,
 
-        @NotBlank(message = "성별은 필수입니다.")
+        @NotNull(message = "성별은 필수입니다.")
         Gender gender,
 
-        Integer profileImageIndex
+        @NotNull(message = "프로필 이미지 선택은 필수입니다.")
+        ProfileNumber profileNumber
 
 ) {
     public Member toEntity(String encodedPassword, String profileImageUrl) {
