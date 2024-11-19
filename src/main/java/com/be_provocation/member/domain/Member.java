@@ -57,4 +57,8 @@ public class Member extends BaseEntity implements UserDetails {
         return email;
     }
 
+    public String getRole() {
+        return this.role.toString();
+    }
+
 }
