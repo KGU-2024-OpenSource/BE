@@ -40,6 +40,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = "테스트용 기본 로그인 API입니다.")
     public ApiResponse<Void> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+
         authService.login(request, response);
 
         return new ApiResponse<>(ErrorCode.REQUEST_OK);
@@ -52,6 +53,15 @@ public class AuthController {
 
         String result = member.getNickname();
         return new ApiResponse<>(result);
+    }
+
+    @GetMapping("/check-nickname")
+    @Operation(summary = "닉네임 중복확인 API", description = "닉네임의 중복 여부를 확인할 수 있는 API입니다..")
+    public ApiResponse<Void> checkNickname(@RequestParam("nickname") String nickname) {
+
+        authService.checkNickname(nickname);
+
+        return new ApiResponse<>(ErrorCode.REQUEST_OK);
     }
 
 

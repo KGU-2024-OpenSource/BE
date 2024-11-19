@@ -59,6 +59,12 @@ public class AuthService {
 
     }
 
+    public void checkNickname(String nickname) {
+        if(memberRepository.existsByNickname(nickname)) {
+            throw CheckmateException.from(ErrorCode.DUPLICATE_MEMBER_NICKNAME);
+        }
+    }
+
     private Boolean isMemberRegistered(String email) {
         return memberRepository.existsByEmail(email);
     }
