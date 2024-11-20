@@ -1,16 +1,45 @@
-version: '3.8'
-
 services:
-  db: # MySQL 서비스
+  provocation-mysql-container: # MySQL 서비스
     image: mysql:8.0.33
     restart: always
     container_name: provocation-mysql-container
     ports:
       - 13306:3306
     environment: # 환경 변수 설정
-      - MYSQL_DATABASE=provocation
-      - MYSQL_ROOT_PASSWORD=0000  # MYSQL 패스워드 설정
-      - TZ=Asia/Seoul
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=${TZ}
     command: # 명령어 실행
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - provocation-network
+
+  app: # Spring Boot 애플리케이션 서비스
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env.docker
+    restart: always
+    container_name: provocation-springboot-container
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://provocation-mysql-container:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - TZ=${TZ}
+    depends_on:
+      - provocation-mysql-container
+    networks:
+      - provocation-network
+volumes:
+  mysql-data:
+
+networks:
+  provocation-network:
+    driver: bridge
