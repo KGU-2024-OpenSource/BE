@@ -1,6 +1,6 @@
 package com.be_provocation.domain.chat.entity;
 
-import com.be_provocation.domain.member.Member;
+import com.be_provocation.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

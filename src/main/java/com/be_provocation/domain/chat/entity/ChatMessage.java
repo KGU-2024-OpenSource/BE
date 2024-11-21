@@ -1,6 +1,6 @@
 package com.be_provocation.domain.chat.entity;
 
-import com.be_provocation.domain.member.Member;
+import com.be_provocation.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,11 +26,11 @@ public class ChatMessage {
     private ChatRoom chatRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "sender_id", nullable = false)
+    private Member sender;
 
     @Column(nullable = false)
-    private String name;
+    private String sender_name;
 
     @Column(nullable = false)
     private String message;

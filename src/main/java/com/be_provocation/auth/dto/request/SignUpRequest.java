@@ -1,13 +1,11 @@
 package com.be_provocation.auth.dto.request;
 
 import com.be_provocation.auth.domain.ProfileNumber;
-import com.be_provocation.member.domain.Gender;
-import com.be_provocation.member.domain.Member;
-import jakarta.validation.constraints.Email;
+import com.be_provocation.domain.member.domain.Gender;
+import com.be_provocation.domain.member.domain.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
 
 public record SignUpRequest(
         @NotBlank(message = "이메일은 필수입니다.")

@@ -1,6 +1,7 @@
 package com.be_provocation.domain.chat.entity;
 
 
+import aj.org.objectweb.asm.commons.InstructionAdapter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,10 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class ChatRoom {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String roomId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -33,4 +35,8 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChatMessage> messages; // 채팅방의 메시지
+
+    public List<ChatMessage> getChatMessages() {
+        return messages;
+    }
 }

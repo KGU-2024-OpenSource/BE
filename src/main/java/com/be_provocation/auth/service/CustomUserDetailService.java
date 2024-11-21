@@ -3,7 +3,7 @@ package com.be_provocation.auth.service;
 import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.global.exception.CheckmateException;
 import com.be_provocation.global.exception.ErrorCode;
-import com.be_provocation.member.repository.MemberRepository;
+import com.be_provocation.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

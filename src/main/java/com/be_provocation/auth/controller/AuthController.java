@@ -6,7 +6,7 @@ import com.be_provocation.auth.service.AuthService;
 import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.ErrorCode;
-import com.be_provocation.member.domain.Member;
+import com.be_provocation.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
