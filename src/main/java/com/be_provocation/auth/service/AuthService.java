@@ -52,7 +52,7 @@ public class AuthService {
 
 
         if (!isMemberRegistered(email)) {
-            throw CheckmateException.from(ErrorCode.ACCOUNT_USERNAME_EXIST);
+            throw CheckmateException.from(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         generateToken(email, password, response);
