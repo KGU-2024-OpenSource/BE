@@ -1,6 +1,6 @@
 package com.be_provocation.auth.util;
 
-import com.be_provocation.member.domain.Member;
+import com.be_provocation.domain.member.domain.Member;
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;

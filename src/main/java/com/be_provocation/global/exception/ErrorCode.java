@@ -16,6 +16,19 @@ public enum ErrorCode {
     PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필 이미지를 찾을 수 없습니다"),
     MEMBER_NOT_ADMIN(HttpStatus.FORBIDDEN, "관리자가 아닙니다"),
 
+    // chat
+    CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다."),
+    CHAT_PARTICIPATION_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅 참여 정보를 찾을 수 없습니다."),
+    CHAT_MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅 메시지를 찾을 수 없습니다."),
+    CHAT_MESSAGE_SEND_FAILED(HttpStatus.NOT_FOUND, "채팅 메시지 전송에 실패하였습니다."),
+    CHAT_PARTICIPATION_FAILED(HttpStatus.NOT_FOUND, "채팅 참여에 실패하였습니다."),
+    CHAT_PARTICIPATION_DUPLICATED(HttpStatus.CONFLICT, "이미 참여한 채팅방입니다."),
+    CHAT_ROOM_CREATE_FAILED(HttpStatus.NOT_FOUND, "채팅방 생성에 실패하였습니다."),
+    CHAT_ROOM_LEAVE_FAILED(HttpStatus.BAD_REQUEST, "채팅방 나가기에 실패하였습니다."),
+    CHAT_ROOM_DELETE_FAILED(HttpStatus.BAD_REQUEST, "채팅방 삭제에 실패하였습니다."),
+    CHAT_ROOM_NOT_PARTICIPANT(HttpStatus.FORBIDDEN, "채팅방 참여자가 아닙니다."),
+    CHAT_ROOM_NOT_OWNER(HttpStatus.FORBIDDEN, "채팅방 소유자가 아닙니다."),
+
     // auth
     MEMBER_JOIN_REQUIRED(HttpStatus.MULTIPLE_CHOICES, "회원가입이 필요합니다."),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
@@ -26,7 +39,6 @@ public enum ErrorCode {
     NEED_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
     INCORRECT_PASSWORD_OR_ACCOUNT(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸거나, 해당 계정이 없습니다."),
     ACCOUNT_USERNAME_EXIST(HttpStatus.UNAUTHORIZED, "해당 계정이 존재합니다."),
-
 
     // others
     REQUEST_OK(HttpStatus.OK, "올바른 요청입니다."),

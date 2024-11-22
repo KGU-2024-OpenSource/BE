@@ -1,16 +1,13 @@
-package com.be_provocation.member.domain;
+package com.be_provocation.domain.member.domain;
 
+import com.be_provocation.domain.chat.entity.ChatParticipation;
 import com.be_provocation.global.domain.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -63,4 +60,6 @@ public class Member extends BaseEntity implements UserDetails {
         return this.role.toString();
     }
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatParticipation> participations; // 유저의 채팅 참여 정보
 }
