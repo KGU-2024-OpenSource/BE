@@ -69,10 +69,13 @@ public class VerificationService {
         }
     }
 
-//    @Transactional(readOnly = true)
-//    public boolean isVerified(String email) {
-//
-//    }
+    @Transactional(readOnly = true)
+    public boolean isVerified(String email) {
+        VerificationCode storedCode = verificationCodeRepository.findByEmail(email)
+                .orElseThrow(() -> CheckmateException.from(ErrorCode.VERIFICATION_REQUIRED));
+
+        return storedCode.isVerified();
+    }
 
     @Transactional
     public void removeCode(String email) {

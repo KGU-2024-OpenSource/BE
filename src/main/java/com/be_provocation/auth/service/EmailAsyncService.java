@@ -35,6 +35,7 @@ public class EmailAsyncService {
         body.append("<h3>안녕하세요 CheckMate입니다.</h3>");
         body.append("<h3>요청하신 인증 번호입니다.</h3>");
         body.append("<h1>").append(verificationCode).append("</h1>");
+        body.append("<h3>감사합니다.</h3>");
         String content = body.toString();
         log.debug("Sending email to: {}", LogSanitizerUtil.sanitizeForLog(to));
         emailQueue.add(new EmailTask(to, "Check Mate 인증번호입니다.", content));

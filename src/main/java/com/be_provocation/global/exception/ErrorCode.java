@@ -42,6 +42,7 @@ public enum ErrorCode {
     VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "인증 코드가 존재하지 않습니다."),
     VERIFICATION_CODE_EXPIRED(HttpStatus.BAD_REQUEST, "만료된 인증 코드입니다."),
     VERIFICATION_CODE_INCORRECT(HttpStatus.BAD_REQUEST, "올바르지 않은 인증코드입니다."),
+    VERIFICATION_REQUIRED(HttpStatus.BAD_REQUEST, "이메일 인증을 먼저 진행하세요."),
 
     // others
     REQUEST_OK(HttpStatus.OK, "올바른 요청입니다."),
