@@ -1,14 +1,19 @@
 package com.be_provocation.auth.controller;
 
+import com.be_provocation.auth.dto.request.GetVerificationRequest;
 import com.be_provocation.auth.dto.request.LoginRequest;
 import com.be_provocation.auth.dto.request.SignUpRequest;
+import com.be_provocation.auth.dto.request.VerifyRequest;
 import com.be_provocation.auth.service.AuthService;
+import com.be_provocation.auth.service.EmailAsyncService;
+import com.be_provocation.auth.service.VerificationService;
 import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.ErrorCode;
 import com.be_provocation.domain.member.domain.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "AuthController", description = "회원 인증 관련 API")
 public class AuthController {
     private final AuthService authService;
+    private final EmailAsyncService emailAsyncService;
+    private final VerificationService verificationService;
 
 
     @PostMapping("/signup")
@@ -38,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "로그인 API", description = "테스트용 기본 로그인 API입니다.")
+    @Operation(summary = "로그인 API", description = "로그인 API입니다.")
     public ApiResponse<Void> login(@RequestBody LoginRequest request, HttpServletResponse response) {
 
         authService.login(request, response);
@@ -63,6 +70,25 @@ public class AuthController {
 
         return new ApiResponse<>(ErrorCode.REQUEST_OK);
     }
+
+    @PostMapping("/verification-code")
+    @Operation(summary = "인증 코드 발행 API", description = "인증 코드를 경기대 메일에 전송하는 API입니다.")
+    public ApiResponse<Void> sendVerificationCode(@RequestBody @Valid GetVerificationRequest request)
+            throws MessagingException {
+        String verificationCode = verificationService.generateVerificationCode(request.email());
+        emailAsyncService.sendEmailAsync(request.email(), verificationCode);
+
+        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+    }
+
+    @PostMapping("/verify-code")
+    @Operation(summary = "인증 코드 검증 API", description = "인증 코드를 검증하는 API입니다.")
+    public ApiResponse<Void> verifyCode(@RequestBody VerifyRequest request) {
+        verificationService.verifyCode(request);
+
+        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+    }
+
 
 
 }

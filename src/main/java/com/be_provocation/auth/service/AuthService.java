@@ -23,6 +23,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationService verificationService;
 
     @Transactional
     public void signUp(SignUpRequest request, HttpServletResponse response) {
@@ -36,6 +37,12 @@ public class AuthService {
         if (isMemberRegistered(email)) {
             throw CheckmateException.from(ErrorCode.ACCOUNT_USERNAME_EXIST);
         }
+
+        if(!verificationService.isVerified(email)) {
+            throw CheckmateException.from(ErrorCode.VERIFICATION_REQUIRED);
+        }
+
+        verificationService.removeCode(email);
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -52,7 +59,7 @@ public class AuthService {
 
 
         if (!isMemberRegistered(email)) {
-            throw CheckmateException.from(ErrorCode.ACCOUNT_USERNAME_EXIST);
+            throw CheckmateException.from(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT);
         }
 
         generateToken(email, password, response);
