@@ -50,7 +50,7 @@ public enum ErrorCode {
     NOT_ENOUGH_PERMISSION(HttpStatus.FORBIDDEN, "해당 권한이 없습니다."),
     INTERNAL_SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러가 발생하였습니다. 관리자에게 문의해 주세요."),
     FOR_TEST_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "테스트용 에러입니다."),
-    ENUM_CONVERSION_ERROR(HttpStatus.BAD_REQUEST, "변환 오류입니다."),
+    ENUM_CONVERSION_ERROR(HttpStatus.BAD_REQUEST, "Enum 변환 오류입니다."),
 
     // validation
     EMAIL_REQUIRED(HttpStatus.BAD_REQUEST, "이메일은 필수입니다."),
@@ -73,6 +73,6 @@ public enum ErrorCode {
                 return errorCode;
             }
         }
-        throw CheckmateException.from(ErrorCode.INTERNAL_SEVER_ERROR);
+        throw CheckmateException.from(ErrorCode.ENUM_CONVERSION_ERROR);
     }
 }
