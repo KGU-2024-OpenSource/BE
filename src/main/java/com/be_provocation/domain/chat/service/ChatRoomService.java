@@ -57,7 +57,7 @@ public class ChatRoomService {
         chatRoom.getParticipation().add(chatParticipation1);
         chatRoom.getParticipation().add(chatParticipation2);
 
-        chatParticipationService.joinRoom(chatRoom.getId(), me, you);
+        chatParticipationService.joinRoom(chatRoom, me, you);
         return chatRoomRepository.save(chatRoom);
     }
 
@@ -105,5 +105,9 @@ public class ChatRoomService {
         }
 
         chatRoom.updateStatus(RoomStatus.DEACTIVATE); // `deactivate`로 변경하면서 `soft delete`만 진행
+    }
+
+    public ChatRoom getChatRoom(Long roomId) {
+        return chatRoomRepository.findById(roomId).orElseThrow(() -> CheckmateException.from(ErrorCode.CHAT_ROOM_NOT_FOUND));
     }
 }
