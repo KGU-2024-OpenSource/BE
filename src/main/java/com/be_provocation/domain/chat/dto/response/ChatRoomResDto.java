@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ChatRoomResDto {
     private Long id;
-    private String name;
+    private String receiver_name;
     private LocalDateTime createdAt;
     private String lastMessage;
     private LocalDateTime lastMessageAt;

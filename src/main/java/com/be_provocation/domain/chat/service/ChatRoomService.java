@@ -1,89 +1,85 @@
 package com.be_provocation.domain.chat.service;
 
-import com.be_provocation.domain.chat.dto.ChatRoomDto;
+import com.be_provocation.auth.service.CustomUserDetailService;
 import com.be_provocation.domain.chat.dto.response.ChatRoomResDto;
 import com.be_provocation.domain.chat.entity.ChatMessage;
 import com.be_provocation.domain.chat.entity.ChatParticipation;
 import com.be_provocation.domain.chat.entity.ChatRoom;
-import com.be_provocation.domain.chat.repository.ChatMessageRepository;
-import com.be_provocation.domain.chat.repository.ChatParticipationRepository;
+import com.be_provocation.domain.chat.entity.RoomStatus;
 import com.be_provocation.domain.chat.repository.ChatRoomRepository;
 import com.be_provocation.domain.member.domain.Member;
-import com.be_provocation.domain.member.repository.MemberRepository;
+import com.be_provocation.global.dto.response.ApiResponse;
+import com.be_provocation.global.exception.CheckmateException;
+import com.be_provocation.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatParticipationRepository chatParticipationRepository;
-    private final MemberRepository memberRepository;
-    private final ChatMessageRepository chatMessageRepository;
+    private final ChatParticipationService chatParticipationService;
+    private final CustomUserDetailService customUserDetailService;
+    private final ChatMessageService chatMessageService;
 
-    public ChatRoomService(ChatRoomRepository chatRoomRepository,
-                           ChatParticipationRepository chatParticipationRepository,
-                           MemberRepository memberRepository, ChatMessageRepository chatMessageRepository) {
-        this.chatRoomRepository = chatRoomRepository;
-        this.chatParticipationRepository = chatParticipationRepository;
-        this.memberRepository = memberRepository;
-        this.chatMessageRepository = chatMessageRepository;
-    }
+    /*
+    채팅방 생성 + 참여자 추가
+    */
+    public ChatRoom createChatRoom(Member me, Long youId) {
 
-    public ChatRoom createChatRoom(ChatRoomDto chatRoomDto) {
+        if (me == null) {
+            throw CheckmateException.from(ErrorCode.ACCOUNT_USERNAME_EXIST);
+        }
+        Member you = customUserDetailService.loadUserById(youId).getMember();
+
         ChatRoom chatRoom = ChatRoom.builder()
-                .name(chatRoomDto.getName())
                 .createdAt(LocalDateTime.now())
                 .build();
-        return chatRoomRepository.save(chatRoom);
-    }
 
-    public ChatRoomDto getChatRoom(Long roomId) {
-        ChatRoom target =  chatRoomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
-        return ChatRoomDto.builder()
-                .name(target.getName())
-                .createdAt(target.getCreatedAt())
+        ChatParticipation chatParticipation1 = ChatParticipation.builder()
+                .chatRoom(chatRoom)
+                .member(me)
                 .build();
-    }
 
-    public List<ChatRoomResDto> getAllRooms() {
+        ChatParticipation chatParticipation2 = ChatParticipation.builder()
+                .chatRoom(chatRoom)
+                .member(you)
+                .build();
 
-        List<ChatRoom> list = chatRoomRepository.findAll();
-        List<ChatRoomResDto> res = new ArrayList<>();
+        chatRoom.getParticipation().add(chatParticipation1);
+        chatRoom.getParticipation().add(chatParticipation2);
 
-        for (ChatRoom chatRoom : list) {
-            res.add(ChatRoomResDto.builder()
-                    .id(chatRoom.getId())
-                    .name(chatRoom.getName())
-                    .createdAt(chatRoom.getCreatedAt())
-                    .build());
-        }
-
-        return res;
+        chatParticipationService.joinRoom(chatRoom.getId(), me, you);
+        return chatRoomRepository.save(chatRoom);
     }
 
     public List<ChatRoomResDto> getAllRoom(Member member) {
 
-        if (member == null) {
-            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
-        }
-
-        List<ChatParticipation> chatParticipationList = chatParticipationRepository.findAllByMemberId(member.getId());
+        List<ChatParticipation> chatParticipationList = chatParticipationService.getParticipationByMember(member);
         List<ChatRoomResDto> chatRooms = new ArrayList<>();
 
         for (ChatParticipation chatParticipation : chatParticipationList) {
+
             Long roomId = chatParticipation.getChatRoom().getId();
-            ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방입니다."));
-            ChatMessage chatMessage = chatMessageRepository.findTopByChatRoomIdOrderByCreatedAtDesc(roomId);
+            ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> CheckmateException.from(ErrorCode.CHAT_ROOM_NOT_FOUND));
+            if (chatRoom.getStatus() == RoomStatus.DEACTIVATE) {
+                continue;
+            }
+
+            ChatMessage chatMessage = chatMessageService.getLastMessage(roomId);
+            List<ChatParticipation> usersInRoom = chatRoom.getParticipation();
 
             chatRooms.add(ChatRoomResDto.builder()
                     .id(chatRoom.getId())
-                    .name(chatRoom.getName())
+                    .receiver_name(Objects.equals(usersInRoom.get(0).getId(), member.getId()) ? usersInRoom.get(1).getMember().getNickname() : usersInRoom.get(0).getMember().getNickname())
                     .createdAt(chatRoom.getCreatedAt())
                     .lastMessage(chatMessage != null ? chatMessage.getMessage() : null)
                     .lastMessageAt(chatMessage != null ? chatMessage.getCreatedAt() : null)
@@ -91,5 +87,23 @@ public class ChatRoomService {
         }
         chatRooms.sort((o1, o2) -> o2.getLastMessageAt().compareTo(o1.getLastMessageAt()));
         return chatRooms;
+    }
+
+    // 유저들끼리 대화 중 문제가 생길 경우, 확인해야할 수 있으니 soft delete 만 지행
+    public void deleteRoom(Long roomId, Member member) {
+
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> CheckmateException.from(ErrorCode.CHAT_ROOM_NOT_FOUND));
+        boolean flag = false;
+        for (ChatParticipation chatParticipation : chatRoom.getParticipation()) {
+            if (Objects.equals(chatParticipation.getMember().getId(), member.getId())) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            throw CheckmateException.from(ErrorCode.CHAT_ROOM_NOT_PARTICIPANT);
+        }
+
+        chatRoom.updateStatus(RoomStatus.DEACTIVATE); // `deactivate`로 변경하면서 `soft delete`만 진행
     }
 }

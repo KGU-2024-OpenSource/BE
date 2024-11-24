@@ -15,25 +15,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/room")
+@RequiredArgsConstructor
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    public ChatRoomController(ChatRoomService chatRoomService) {
-        this.chatRoomService = chatRoomService;
-    }
-
-
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "채팅방 생성 API", description = "'대화 참여하기' 눌렀을 때, 채팅방을 생성하는 API입니다.")
-    public ChatRoom crateRoom(String chatRoomName) {
-        return chatRoomService.createChatRoom(ChatRoomDto.builder()
-                .name(chatRoomName)
-                .build());
+    public ChatRoom crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,
+                              @RequestParam Long youId) {
+        return chatRoomService.createChatRoom(userDetails.getMember(), youId);
     }
 
-    @GetMapping("/get/list")
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "참여중인 채팅방 조회 API", description = "본인이 참여중인 채팅방을 조회하는 API입니다.")
     public List<ChatRoomResDto> getMessagesByRoom(@AuthenticationPrincipal CustomUserDetails userDetails) {
