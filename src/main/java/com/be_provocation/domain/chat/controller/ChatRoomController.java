@@ -5,7 +5,10 @@ import com.be_provocation.domain.chat.dto.ChatRoomDto;
 import com.be_provocation.domain.chat.dto.response.ChatRoomResDto;
 import com.be_provocation.domain.chat.entity.ChatRoom;
 import com.be_provocation.domain.chat.service.ChatRoomService;
+import com.be_provocation.global.dto.response.ApiResponse;
+import com.be_provocation.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +38,10 @@ public class ChatRoomController {
         return chatRoomService.getAllRoom(userDetails.getMember());
     }
 
-    @GetMapping("/all")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "모든 채팅방 조회", description = "데이터베이스의 모든 채팅방을 조회하는 API")
-    public List<ChatRoomResDto> getAllRooms() {
-        return chatRoomService.getAllRooms();
+    @DeleteMapping("/delete/{roomId}")
+    @Operation(summary = "채팅방 삭제 API", description = "채팅방을 삭제하는 API입니다.")
+    public ApiResponse<String> deleteRoom(@PathVariable Long roomId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        chatRoomService.deleteRoom(roomId, userDetails.getMember());
+        return new ApiResponse<>(ErrorCode.REQUEST_OK);
     }
 }
