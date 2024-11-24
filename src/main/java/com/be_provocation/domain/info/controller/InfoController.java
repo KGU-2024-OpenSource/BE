@@ -4,6 +4,7 @@ import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
 import com.be_provocation.domain.info.service.InfoService;
 import com.be_provocation.domain.member.domain.Member;
+import com.be_provocation.global.domain.SuccessCode;
 import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +30,6 @@ public class InfoController {
         Member member = customUserDetails.getMember();
 
         infoService.save(request, member);
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 }
