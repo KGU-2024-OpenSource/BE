@@ -39,6 +39,8 @@ public enum ErrorCode {
     UNSUPPORTED_TOKEN_TYPE(HttpStatus.UNAUTHORIZED,"지원하지 않는 JWT 형식의 토큰입니다."),
     NEED_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
     INCORRECT_PASSWORD_OR_ACCOUNT(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸거나, 해당 계정이 존재하지 않습니다."),
+    INCORRECT_ACCOUNT(HttpStatus.UNAUTHORIZED, "해당 계정이 존재하지 않습니다."),
+    INCORRECT_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다."),
     ACCOUNT_USERNAME_EXIST(HttpStatus.UNAUTHORIZED, "해당 계정이 존재합니다."),
     VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "인증 코드가 존재하지 않습니다."),
     VERIFICATION_CODE_EXPIRED(HttpStatus.BAD_REQUEST, "만료된 인증 코드입니다."),
