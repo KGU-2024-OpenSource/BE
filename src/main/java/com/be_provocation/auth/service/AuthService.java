@@ -8,6 +8,7 @@ import com.be_provocation.global.exception.ErrorCode;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.domain.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -57,9 +58,11 @@ public class AuthService {
         String email = request.email();
         String password = request.password();
 
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(() -> CheckmateException.from(ErrorCode.INCORRECT_ACCOUNT));
 
-        if (!isMemberRegistered(email)) {
-            throw CheckmateException.from(ErrorCode.INCORRECT_PASSWORD_OR_ACCOUNT);
+        if(!passwordEncoder.matches(password, findMember.getPassword())) {
+            throw CheckmateException.from(ErrorCode.INCORRECT_PASSWORD);
         }
 
         generateToken(email, password, response);
