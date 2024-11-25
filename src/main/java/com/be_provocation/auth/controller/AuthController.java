@@ -8,6 +8,7 @@ import com.be_provocation.auth.service.AuthService;
 import com.be_provocation.auth.service.EmailAsyncService;
 import com.be_provocation.auth.service.VerificationService;
 import com.be_provocation.auth.util.CustomUserDetails;
+import com.be_provocation.global.domain.SuccessCode;
 import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.ErrorCode;
 import com.be_provocation.domain.member.domain.Member;
@@ -41,7 +42,7 @@ public class AuthController {
 
         authService.signUp(signUpRequest, response);
 
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 
     @PostMapping("/login")
@@ -50,7 +51,7 @@ public class AuthController {
 
         authService.login(request, response);
 
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 
     @GetMapping("/test")
@@ -68,7 +69,7 @@ public class AuthController {
 
         authService.checkNickname(nickname);
 
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 
     @PostMapping("/verification-code")
@@ -78,7 +79,7 @@ public class AuthController {
         String verificationCode = verificationService.generateVerificationCode(request.email());
         emailAsyncService.sendEmailAsync(request.email(), verificationCode);
 
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 
     @PostMapping("/verify-code")
@@ -86,7 +87,7 @@ public class AuthController {
     public ApiResponse<Void> verifyCode(@RequestBody VerifyRequest request) {
         verificationService.verifyCode(request);
 
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 
 

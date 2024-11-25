@@ -1,5 +1,6 @@
 package com.be_provocation.global.dto.response;
 
+import com.be_provocation.global.domain.SuccessCode;
 import com.be_provocation.global.exception.CheckmateException;
 import com.be_provocation.global.exception.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -51,6 +52,12 @@ public class ApiResponse<T> {
 //        this.results = slice.getContent();
 //    }
 
+    //정상 응답 코드 생성자
+    public ApiResponse(SuccessCode successCode) {
+        this.status = new Status(successCode);
+    }
+
+
     // 오류 코드 생성자
     public ApiResponse(ErrorCode errorCode) {
         this.status = new Status(errorCode);
@@ -91,6 +98,11 @@ public class ApiResponse<T> {
         public Status(ErrorCode errorCode) {
             this.code = errorCode.getStatus().value();
             this.message = errorCode.getMessage();
+        }
+
+        public Status(SuccessCode successCode) {
+            this.code = successCode.getStatus().value();
+            this.message = successCode.getMessage();
         }
     }
 
