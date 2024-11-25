@@ -31,13 +31,27 @@ public class ChatRoom {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatParticipation> participation; // 채팅방의 참여 정보
+    private List<ChatParticipation> participation;// 채팅방의 참여 정보
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ChatMessage> messages; // 채팅방의 메시지
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ChatMessage> messages;
 
     public List<ChatMessage> getChatMessages() {
         return messages;
+    }
+
+    public void addParticipation(ChatParticipation chatParticipation) {
+        if (participation == null) {
+            participation = new ArrayList<>();
+        }
+        participation.add(chatParticipation);
+    }
+
+    public void addMessage(ChatMessage chatMessage) {
+        if (messages == null) {
+            messages = new ArrayList<>();
+        }
+        messages.add(chatMessage);
     }
 
     public void updateStatus(RoomStatus roomStatus) {

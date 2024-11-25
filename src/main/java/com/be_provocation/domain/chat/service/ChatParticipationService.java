@@ -27,6 +27,8 @@ public class ChatParticipationService {
                                             .chatRoom(chatRoom)
                                             .member(you)
                                             .build());
+        chatRoom.addParticipation(participation1);
+        chatRoom.addParticipation(participation2);
     }
 
     public List<ChatParticipation> getParticipationByMember(Member member) {

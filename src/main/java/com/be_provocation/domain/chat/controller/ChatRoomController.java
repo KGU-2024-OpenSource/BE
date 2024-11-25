@@ -26,7 +26,7 @@ public class ChatRoomController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "채팅방 생성 API", description = "'대화 참여하기' 눌렀을 때, 채팅방을 생성하는 API입니다.")
-    public ChatRoom crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ChatRoomResDto crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @RequestParam Long youId) {
         return chatRoomService.createChatRoom(userDetails.getMember(), youId);
     }
@@ -39,7 +39,7 @@ public class ChatRoomController {
     }
 
     @DeleteMapping("/delete/{roomId}")
-    @Operation(summary = "채팅방 삭제 API", description = "채팅방을 삭제하는 API입니다.")
+    @Operation(summary = "채팅방 나가기(삭제) API", description = "채팅방을 나가기(삭제)하는 API입니다.")
     public ApiResponse<String> deleteRoom(@PathVariable Long roomId, @AuthenticationPrincipal CustomUserDetails userDetails) {
         chatRoomService.deleteRoom(roomId, userDetails.getMember());
         return new ApiResponse<>(ErrorCode.REQUEST_OK);

@@ -8,21 +8,23 @@ import com.be_provocation.domain.chat.entity.ChatRoom;
 import com.be_provocation.domain.chat.entity.RoomStatus;
 import com.be_provocation.domain.chat.repository.ChatRoomRepository;
 import com.be_provocation.domain.member.domain.Member;
-import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.CheckmateException;
 import com.be_provocation.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -33,32 +35,24 @@ public class ChatRoomService {
     /*
     채팅방 생성 + 참여자 추가
     */
-    public ChatRoom createChatRoom(Member me, Long youId) {
+    public ChatRoomResDto createChatRoom(Member me, Long youId) {
 
         if (me == null) {
             throw CheckmateException.from(ErrorCode.ACCOUNT_USERNAME_EXIST);
         }
+        if (Objects.equals(youId, me.getId())) {
+            throw CheckmateException.from(ErrorCode.CHAT_ROOM_SELF);
+        }
+
         Member you = customUserDetailService.loadUserById(youId).getMember();
 
         ChatRoom chatRoom = ChatRoom.builder()
+                .status(RoomStatus.ACTIVATE)
                 .createdAt(LocalDateTime.now())
                 .build();
-
-        ChatParticipation chatParticipation1 = ChatParticipation.builder()
-                .chatRoom(chatRoom)
-                .member(me)
-                .build();
-
-        ChatParticipation chatParticipation2 = ChatParticipation.builder()
-                .chatRoom(chatRoom)
-                .member(you)
-                .build();
-
-        chatRoom.getParticipation().add(chatParticipation1);
-        chatRoom.getParticipation().add(chatParticipation2);
-
+        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
         chatParticipationService.joinRoom(chatRoom, me, you);
-        return chatRoomRepository.save(chatRoom);
+        return ChatRoomResDto.fromEntity(savedChatRoom, you.getNickname());
     }
 
     public List<ChatRoomResDto> getAllRoom(Member member) {
@@ -74,18 +68,19 @@ public class ChatRoomService {
                 continue;
             }
 
-            ChatMessage chatMessage = chatMessageService.getLastMessage(roomId);
+            Optional<ChatMessage> chatMessage = chatMessageService.getLastMessage(roomId);
             List<ChatParticipation> usersInRoom = chatRoom.getParticipation();
+            String receiverName = Objects.equals(usersInRoom.get(0).getId(), member.getId()) ? usersInRoom.get(0).getMember().getNickname() : usersInRoom.get(1).getMember().getNickname();
 
-            chatRooms.add(ChatRoomResDto.builder()
-                    .id(chatRoom.getId())
-                    .receiver_name(Objects.equals(usersInRoom.get(0).getId(), member.getId()) ? usersInRoom.get(1).getMember().getNickname() : usersInRoom.get(0).getMember().getNickname())
-                    .createdAt(chatRoom.getCreatedAt())
-                    .lastMessage(chatMessage != null ? chatMessage.getMessage() : null)
-                    .lastMessageAt(chatMessage != null ? chatMessage.getCreatedAt() : null)
-                    .build());
+            chatRooms.add(ChatRoomResDto.fromEntity(chatRoom, receiverName, chatMessage.orElse(null)));
         }
-        chatRooms.sort((o1, o2) -> o2.getLastMessageAt().compareTo(o1.getLastMessageAt()));
+        chatRooms.sort((o1, o2) -> {
+            // o2의 메시지가 null인지 확인하고, null일 경우 생성시간으로 비교
+            LocalDateTime time1 = o1.getLastMessageAt() != null ? o1.getLastMessageAt() : o1.getCreatedAt();
+            LocalDateTime time2 = o2.getLastMessageAt() != null ? o2.getLastMessageAt() : o2.getCreatedAt();
+
+            return time2.compareTo(time1); // 최근 시간 순으로 정렬
+        });
         return chatRooms;
     }
 
