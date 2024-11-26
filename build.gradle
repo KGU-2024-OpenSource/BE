@@ -7,6 +7,11 @@ plugins {
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 
+springBoot {
+	mainClass = 'com.be_provocation.BeProvocationApplication'
+}
+
+
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)

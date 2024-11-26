@@ -1,0 +1,128 @@
+# MySQL ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  MYSQL_DATABASE: "provocation"
+  TZ: "Asia/Seoul"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://provocation-mysql:3306/provocation?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul"
+---
+# MySQL Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-secret
+type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: MDAwMA==
+  SPRING_DATASOURCE_USERNAME: cm9vdA==
+  SPRING_DATASOURCE_PASSWORD: MDAwMA==
+---
+# MySQL Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: provocation-mysql
+  labels:
+    app: provocation-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: provocation-mysql
+  template:
+    metadata:
+      labels:
+        app: provocation-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0.33
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: MYSQL_DATABASE
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: TZ
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: TZ
+          args:
+            - "--character-set-server=utf8mb4"
+            - "--collation-server=utf8mb4_unicode_ci"
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          hostPath:
+            path: /mnt/data/mysql
+            type: DirectoryOrCreate
+---
+# MySQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: provocation-mysql
+spec:
+  selector:
+    app: provocation-mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+---
+# Spring Boot Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: provocation-springboot
+  labels:
+    app: provocation-springboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: provocation-springboot
+  template:
+    metadata:
+      labels:
+        app: provocation-springboot
+    spec:
+      containers:
+        - name: springboot-app
+          image: checkmatekgu/provocation-springboot-container:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: app-secret
+---
+# Spring Boot Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: provocation-springboot
+spec:
+  selector:
+    app: provocation-springboot
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+
+
