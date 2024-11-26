@@ -30,6 +30,9 @@ public enum ErrorCode {
     CHAT_ROOM_NOT_OWNER(HttpStatus.FORBIDDEN, "채팅방 소유자가 아닙니다."),
     CHAT_ROOM_SELF(HttpStatus.BAD_REQUEST, "자신과의 채팅방을 생성할 수 없습니다."),
 
+    // web socket
+    CHAT_SEND_FAILED(HttpStatus.BAD_REQUEST, "채팅 메시지 전송에 실패하였습니다."),
+
     // auth
     MEMBER_JOIN_REQUIRED(HttpStatus.MULTIPLE_CHOICES, "회원가입이 필요합니다."),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
