@@ -15,10 +15,4 @@ public class ChatRoomDto {
     private String name;
 
     private LocalDateTime createdAt;
-
-
-//    public ChatRoomDto(String name, LocalDateTime createdAt) {
-//        this.name = name;
-//        this.createdAt = createdAt;
-//    }
 }

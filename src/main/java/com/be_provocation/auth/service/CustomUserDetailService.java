@@ -23,4 +23,10 @@ public class CustomUserDetailService implements UserDetailsService {
                 .orElseThrow(() -> CheckmateException.from(ErrorCode.MEMBER_NOT_FOUND));
     }
 
+    public CustomUserDetails loadUserById(Long id) {
+        return memberRepository.findById(id)
+                .map(CustomUserDetails::new)
+                .orElseThrow(() -> CheckmateException.from(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
 }

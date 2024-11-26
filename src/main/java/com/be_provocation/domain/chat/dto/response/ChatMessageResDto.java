@@ -1,10 +1,11 @@
 package com.be_provocation.domain.chat.dto.response;
 
-import jakarta.validation.constraints.NotBlank;
+import com.be_provocation.domain.chat.entity.ChatMessage;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter @Setter
 @AllArgsConstructor
@@ -14,12 +15,27 @@ public class ChatMessageResDto {
     @Size(min = 1, max = 200, message = "메시지는 최소 1자, 최대 200자까지 입력 가능합니다.")
     private String message;
 
-    private Long sender_id;
+    private Long senderId;
 
-    @NotBlank(message = "채팅방 번호는 필수입니다.")
-    private Long room_id;
+    private Long roomId;
 
-    private String sender_name;
+    private String senderName;
 
     private LocalDateTime createdAt;
+
+    public static ChatMessageResDto fromEntity(ChatMessage chatMessage) {
+        return ChatMessageResDto.builder()
+                .roomId(chatMessage.getChatRoom().getId())
+                .senderId(chatMessage.getSender().getId())
+                .senderName(chatMessage.getSender_name())
+                .message(chatMessage.getMessage())
+                .createdAt(chatMessage.getCreatedAt())
+                .build();
+    }
+
+    public static List<ChatMessageResDto> fromEntitieList(List<ChatMessage> chatMessages) {
+        return chatMessages.stream()
+                .map(ChatMessageResDto::fromEntity)
+                .toList();
+    }
 }
