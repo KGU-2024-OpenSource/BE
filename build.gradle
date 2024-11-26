@@ -35,6 +35,9 @@ dependencies {
 	// websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	// local date time
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2'
+
 	//email-verification
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
