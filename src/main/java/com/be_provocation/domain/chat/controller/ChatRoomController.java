@@ -5,6 +5,7 @@ import com.be_provocation.domain.chat.dto.ChatRoomDto;
 import com.be_provocation.domain.chat.dto.response.ChatRoomResDto;
 import com.be_provocation.domain.chat.entity.ChatRoom;
 import com.be_provocation.domain.chat.service.ChatRoomService;
+import com.be_provocation.global.domain.SuccessCode;
 import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,22 +27,22 @@ public class ChatRoomController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "채팅방 생성 API", description = "'대화 참여하기' 눌렀을 때, 채팅방을 생성하는 API입니다.")
-    public ChatRoomResDto crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ApiResponse<ChatRoomResDto> crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,
                               @RequestParam Long youId) {
-        return chatRoomService.createChatRoom(userDetails.getMember(), youId);
+        return new ApiResponse<>(chatRoomService.createChatRoom(userDetails.getMember(), youId));
     }
 
     @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "참여중인 채팅방 조회 API", description = "본인이 참여중인 채팅방을 조회하는 API입니다.")
-    public List<ChatRoomResDto> getMessagesByRoom(@AuthenticationPrincipal CustomUserDetails userDetails) {
-        return chatRoomService.getAllRoom(userDetails.getMember());
+    public ApiResponse<List<ChatRoomResDto>> getMessagesByRoom(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return new ApiResponse<List<ChatRoomResDto>>(chatRoomService.getAllRoom(userDetails.getMember()));
     }
 
     @DeleteMapping("/delete/{roomId}")
     @Operation(summary = "채팅방 나가기(삭제) API", description = "채팅방을 나가기(삭제)하는 API입니다.")
-    public ApiResponse<String> deleteRoom(@PathVariable Long roomId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ApiResponse deleteRoom(@PathVariable Long roomId, @AuthenticationPrincipal CustomUserDetails userDetails) {
         chatRoomService.deleteRoom(roomId, userDetails.getMember());
-        return new ApiResponse<>(ErrorCode.REQUEST_OK);
+        return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
 }

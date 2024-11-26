@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -48,7 +47,7 @@ public class ChatMessageService {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> CheckmateException.from(ErrorCode.CHAT_ROOM_NOT_FOUND));
         List<ChatMessage> chatMessagesRoom = chatRoom.getChatMessages();
 
-        return ChatMessageResDto.fromEntities(chatMessagesRoom);
+        return ChatMessageResDto.fromEntitieList(chatMessagesRoom);
     }
 
     public Optional<ChatMessage> getLastMessage(Long roomId) {
