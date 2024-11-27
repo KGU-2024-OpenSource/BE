@@ -96,11 +96,11 @@ jobs:
       # 6. Docker 이미지 빌드
       - name: Build Docker image
         run: |
-          docker build -t your-dockerhub-username/provocation-springboot-container:latest .
+          docker build -t checkmatekgu/provocation-springboot-container:latest .
           docker images | grep provocation-springboot-container
 
       # 7. Docker 이미지 푸시
       - name: Push Docker image
         run: |
-          docker push your-dockerhub-username/provocation-springboot-container:latest
+          docker push checkmatekgu/provocation-springboot-container:latest
           echo "Docker image pushed successfully to Docker Hub."
