@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file:
-      - .env.docker
+      - src/main/resources/.env.docker
     restart: always
     container_name: provocation-springboot-container
     ports:
