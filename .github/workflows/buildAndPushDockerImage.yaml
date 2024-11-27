@@ -3,7 +3,7 @@ name: Build And Push Docker Image
 on:
   push:
     branches:
-      - infra/action-#19 # develop으로 수정해야 함
+      - develop
 jobs:
   build:
     runs-on: ubuntu-latest
