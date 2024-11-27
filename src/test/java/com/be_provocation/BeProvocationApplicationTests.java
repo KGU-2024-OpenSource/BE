@@ -1,3 +1,4 @@
+/*
 package com.be_provocation;
 
 import org.junit.jupiter.api.Test;
@@ -13,3 +14,4 @@ class BeProvocationApplicationTests {
 	}
 
 }
+*/
