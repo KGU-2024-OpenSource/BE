@@ -20,7 +20,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'  # AdoptOpenJDK의 후속인 Temurin 사용
 
-      # 3. Gradle 캐시 설정 (선택 사항)
+      # 환경 변수 파일 생성
+      - name: Set environment values for main application
+        run: |
+          cd ./src/main/resources
+          touch ./env.docker
+          echo "${{ secrets.ENV }}" > ./env.docker
+        shell: bash
+
+      # 3. Gradle 캐시 설정
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -40,7 +48,7 @@ jobs:
         run: |
           ./gradlew clean build
 
-      # 6. 빌드 결과 확인 (선택적)
+      # 6. 빌드 결과 확인
       - name: Verify build artifacts
         run: ls -al build/libs
 
