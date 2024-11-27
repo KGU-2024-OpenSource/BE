@@ -8,6 +8,8 @@ build/
 src/main/resources/.env
 src/main/resources/.env.docker
 src/test/resources/.env.test
+.env
+.env.docker
 
 ### STS ###
 .apt_generated
