@@ -28,13 +28,6 @@ jobs:
           echo "${{ secrets.ENV }}" > ./env.docker
         shell: bash
 
-      - name: Set environment values for test
-        run: |
-          cd ./src/test/resources
-          touch ./env.test
-          echo "${{ secrets.TEST_ENV }}" > ./env.test
-        shell: bash
-
       # 3. Gradle 캐시 설정
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
