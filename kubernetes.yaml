@@ -1,24 +1,3 @@
-# MySQL ConfigMap
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: app-config
-data:
-  MYSQL_DATABASE: "provocation"
-  TZ: "Asia/Seoul"
-  SPRING_DATASOURCE_URL: "jdbc:mysql://provocation-mysql:3306/provocation?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul"
----
-# MySQL Secret
-apiVersion: v1
-kind: Secret
-metadata:
-  name: app-secret
-type: Opaque
-data:
-  MYSQL_ROOT_PASSWORD: MDAwMA==
-  SPRING_DATASOURCE_USERNAME: cm9vdA==
-  SPRING_DATASOURCE_PASSWORD: MDAwMA==
----
 # MySQL Deployment
 apiVersion: apps/v1
 kind: Deployment
