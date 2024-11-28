@@ -35,9 +35,9 @@ public class AuthService {
 
         String profileImageUrl = null; // 인덱스에 따른 이미지 링크 추가
         switch (profileNumber) {
-            case ONE -> profileImageUrl = "http://localhost:8080/images/profile11.png";
-            case TWO -> profileImageUrl = "http://localhost:8080/images/profile22.png";
-            case THREE -> profileImageUrl = "http://localhost:8080/images/profile33.png";
+            case ONE -> profileImageUrl = "http://localhost:8080/images/profile1.png";
+            case TWO -> profileImageUrl = "http://localhost:8080/images/profile2.png";
+            case THREE -> profileImageUrl = "http://localhost:8080/images/profile3.png";
             default -> throw CheckmateException.from(ErrorCode.INTERNAL_SEVER_ERROR);
         }
         if (isMemberRegistered(email)) {
