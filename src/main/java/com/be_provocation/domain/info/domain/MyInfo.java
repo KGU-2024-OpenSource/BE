@@ -1,6 +1,7 @@
 package com.be_provocation.domain.info.domain;
 
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
+import com.be_provocation.domain.info.dto.response.FilteringResponse;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.global.domain.BaseEntity;
 import jakarta.persistence.Entity;
@@ -15,9 +16,11 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -70,6 +73,11 @@ public class MyInfo extends BaseEntity {
                 .ifPresent(value -> this.desiredCloseness = DesiredCloseness.fromDisplayName(value));
         Optional.ofNullable(request.myDepartment())
                 .ifPresent(value -> this.department = value);
+    }
+
+    public FilteringResponse toFilteringResponse() {
+        return new FilteringResponse(this.id, member.getNickname(), member.getProfileImageUrl(), this.mbti,
+                this.studentId, this.birthYear, this.department, this.desiredCloseness.getDisplayName());
     }
 
 }

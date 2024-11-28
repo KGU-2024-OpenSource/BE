@@ -2,6 +2,7 @@ package com.be_provocation.domain.info.controller;
 
 import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
+import com.be_provocation.domain.info.dto.response.FilteringResponse;
 import com.be_provocation.domain.info.service.InfoService;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.global.domain.SuccessCode;
@@ -9,8 +10,10 @@ import com.be_provocation.global.dto.response.ApiResponse;
 import com.be_provocation.global.exception.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +35,13 @@ public class InfoController {
         infoService.save(request, member);
         return new ApiResponse<>(SuccessCode.REQUEST_OK);
     }
+
+    @GetMapping
+    @Operation(summary = "룸메이트 필터링 API", description = "필터링된 룸메이트의 정보를 가져오하는 API입니다.")
+    public ApiResponse<FilteringResponse> filtering(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Member member = customUserDetails.getMember();
+
+        return new ApiResponse<>(infoService.filtering(member));
+    }
+
 }
