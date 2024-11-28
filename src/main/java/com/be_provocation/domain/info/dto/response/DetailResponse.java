@@ -12,11 +12,11 @@ public record DetailResponse(
               int birthYear,
               int studentId,
               Gender gender,
-              SmokingStatus smokingStatus,
-              SnoringStatus snoringStatus,
-              SleepSensitivity sleepSensitivity,
+              String smokingStatus,
+              String snoringStatus,
+              String sleepSensitivity,
               MBTI mbti,
-              DesiredCloseness desiredCloseness,
+              String desiredCloseness,
               String department
 
         ) {
@@ -27,11 +27,11 @@ public record DetailResponse(
                 .birthYear(myInfo.getBirthYear())
                 .studentId(myInfo.getStudentId())
                 .gender(member.getGender())
-                .smokingStatus(myInfo.getSmokingStatus())
-                .snoringStatus(myInfo.getSnoringStatus())
-                .sleepSensitivity(myInfo.getSleepSensitivity())
+                .smokingStatus(myInfo.getSmokingStatus().getDisplayName())
+                .snoringStatus(myInfo.getSnoringStatus().getDisplayName())
+                .sleepSensitivity(myInfo.getSleepSensitivity().getDisplayName())
                 .mbti(myInfo.getMbti())
-                .desiredCloseness(myInfo.getDesiredCloseness())
+                .desiredCloseness(myInfo.getDesiredCloseness().getDisplayName())
                 .department(myInfo.getDepartment())
                 .build();
     }
