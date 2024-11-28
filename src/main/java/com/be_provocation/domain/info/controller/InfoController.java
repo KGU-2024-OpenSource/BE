@@ -38,10 +38,10 @@ public class InfoController {
 
     @GetMapping
     @Operation(summary = "룸메이트 필터링 API", description = "필터링된 룸메이트의 정보를 가져오하는 API입니다.")
-    public ApiResponse<List<FilteringResponse>> filtering(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ApiResponse<FilteringResponse> filtering(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         Member member = customUserDetails.getMember();
 
-        return new ApiResponse<List<FilteringResponse>>(infoService.filtering(member));
+        return new ApiResponse<>(infoService.filtering(member));
     }
 
 }
