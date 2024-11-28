@@ -6,6 +6,7 @@ import com.be_provocation.domain.info.domain.SmokingStatus;
 import com.be_provocation.domain.info.domain.SnoringStatus;
 import com.be_provocation.domain.info.domain.YourInfo;
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
+import com.be_provocation.domain.info.dto.response.DetailResponse;
 import com.be_provocation.domain.info.dto.response.FilteringResponse;
 import com.be_provocation.domain.info.repository.MyInfoRepository;
 import com.be_provocation.domain.info.repository.YourInfoRepository;
@@ -56,5 +57,13 @@ public class InfoService {
                 .map(MyInfo::toFilteringResponse)
                 .collect(Collectors.toList());
 
+    }
+
+    @Transactional(readOnly = true)
+    public DetailResponse getDetails(Long myInfoId) {
+        MyInfo roommateInfo = myInfoRepository.findById(myInfoId)
+                .orElseThrow(() -> CheckmateException.from(ErrorCode.INFO_NOT_FOUND));
+        Member roommate = roommateInfo.getMember();
+        return DetailResponse.of(roommate, roommateInfo);
     }
 }

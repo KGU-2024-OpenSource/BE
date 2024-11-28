@@ -17,6 +17,9 @@ public enum ErrorCode {
     MEMBER_NOT_ADMIN(HttpStatus.FORBIDDEN, "관리자가 아닙니다"),
     YOURINFO_NOT_FOUND(HttpStatus.NOT_FOUND, "희망 룸메이트 정보를 찾을 수 없습니다."),
 
+    // info
+    INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "정보를 찾을 수 없습니다."),
+
     // chat
     CHAT_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅방을 찾을 수 없습니다."),
     CHAT_PARTICIPATION_NOT_FOUND(HttpStatus.NOT_FOUND, "채팅 참여 정보를 찾을 수 없습니다."),

@@ -2,6 +2,7 @@ package com.be_provocation.domain.info.controller;
 
 import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
+import com.be_provocation.domain.info.dto.response.DetailResponse;
 import com.be_provocation.domain.info.dto.response.FilteringResponse;
 import com.be_provocation.domain.info.service.InfoService;
 import com.be_provocation.domain.member.domain.Member;
@@ -13,11 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/info")
@@ -42,6 +39,12 @@ public class InfoController {
         Member member = customUserDetails.getMember();
 
         return new ApiResponse<>(infoService.filtering(member));
+    }
+
+    @GetMapping("{myInfoId}")
+    @Operation(summary = "룸메이트 정보 상세보기 API", description = "한 명의 룸메이트의 구체적인 정보를 가져오는 API입니다.")
+    public ApiResponse<DetailResponse> getDetails(@PathVariable("myInfoId") Long myInfoId) {
+        return new ApiResponse<>(infoService.getDetails(myInfoId));
     }
 
 }
