@@ -40,7 +40,7 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v1/api-docs/**","/health-check/**")
                                 .permitAll()
                                 // 해당 API에 대해서는 모든 요청을 허가
-                                .requestMatchers("/auth/login","/auth/signup", "/auth/check-nickname", "/auth/verification-code", "/auth/verify-code").permitAll()
+                                .requestMatchers("/auth/login","/auth/signup", "/auth/check-nickname", "/auth/verification-code", "/auth/verify-code", "/images/**").permitAll()
                                 //.requestMatchers("/members/test").hasRole("USER")
                                 // USER 권한이 있어야 요청할 수 있음
                                 //.requestMatchers("/members/test").hasRole("USER")
