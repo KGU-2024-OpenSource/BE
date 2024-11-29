@@ -30,7 +30,7 @@ public class ChatMessageController {
     @Operation(summary = "메시지 생성 API", description = "메시지를 생성하는 API입니다.")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<ChatMessageResDto> sendMessage(@Valid @RequestBody ChatMessageReqDto chatMessageDto,
-                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                                      @AuthenticationPrincipal CustomUserDetails userDetails) {
         ChatMessageResDto res = chatMessageService.sendMessage(chatMessageDto, userDetails);
         return new ApiResponse<>(res);
     }
@@ -38,8 +38,8 @@ public class ChatMessageController {
     @GetMapping("/all/{roomId}")
     @Operation(summary = "채팅방 전체 메시지 조회 API", description = "특정 채팅방의 모든 메시지를 조회하는 API입니다.")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<ChatMessageResDto>> getAllMessagesByRoom(@PathVariable Long roomId,
-                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ApiResponse<List<ChatMessageResDto>> getAllMessagesByRoom(@PathVariable("roomId") Long roomId,
+                                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
         return new ApiResponse<List<ChatMessageResDto>>(chatMessageService.getMessagesByRoom(roomId, userDetails));
     }
 }
