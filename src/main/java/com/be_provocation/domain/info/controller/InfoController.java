@@ -4,6 +4,7 @@ import com.be_provocation.auth.util.CustomUserDetails;
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
 import com.be_provocation.domain.info.dto.response.DetailResponse;
 import com.be_provocation.domain.info.dto.response.FilteringResponse;
+import com.be_provocation.domain.info.dto.response.IamYouAreResponse;
 import com.be_provocation.domain.info.service.InfoService;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.global.domain.SuccessCode;
@@ -45,6 +46,14 @@ public class InfoController {
     @Operation(summary = "룸메이트 정보 상세보기 API", description = "한 명의 룸메이트의 구체적인 정보를 가져오는 API입니다.")
     public ApiResponse<DetailResponse> getDetails(@PathVariable("myInfoId") Long myInfoId) {
         return new ApiResponse<>(infoService.getDetails(myInfoId));
+    }
+
+    @GetMapping("/my")
+    @Operation(summary = "나의 나는너는 정보 조회하기 API", description = "로그인한 사용자가 작성한 나는 너는 정보를 반환하는 API입니다.")
+    public ApiResponse<IamYouAreResponse> getMyIamYouAreInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Member member = customUserDetails.getMember();
+
+        return new ApiResponse<IamYouAreResponse>(infoService.getMyIamYouAreInfo(member));
     }
 
 }
