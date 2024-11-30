@@ -8,6 +8,7 @@ import com.be_provocation.domain.info.domain.YourInfo;
 import com.be_provocation.domain.info.dto.request.InfoSaveRequest;
 import com.be_provocation.domain.info.dto.response.DetailResponse;
 import com.be_provocation.domain.info.dto.response.FilteringResponse;
+import com.be_provocation.domain.info.dto.response.IamYouAreResponse;
 import com.be_provocation.domain.info.repository.MyInfoRepository;
 import com.be_provocation.domain.info.repository.YourInfoRepository;
 import com.be_provocation.domain.member.domain.Gender;
@@ -57,6 +58,14 @@ public class InfoService {
                 .map(MyInfo::toFilteringResponse)
                 .collect(Collectors.toList());
 
+    }
+
+    @Transactional(readOnly = true)
+    public IamYouAreResponse getMyIamYouAreInfo(Member member) {
+        MyInfo myInfo = myInfoRepository.findByMember(member).orElseThrow(() -> CheckmateException.from(ErrorCode.MYINFO_NOT_FOUND));
+        YourInfo yourInfo = yourInfoRepository.findByMember(member).orElseThrow(() -> CheckmateException.from(ErrorCode.YOURINFO_NOT_FOUND));
+
+        return IamYouAreResponse.toDto(myInfo, yourInfo);
     }
 
     @Transactional(readOnly = true)

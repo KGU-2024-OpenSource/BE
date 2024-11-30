@@ -15,6 +15,7 @@ public enum ErrorCode {
     DUPLICATE_MEMBER_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 닉네임입니다"),
     PROFILE_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "프로필 이미지를 찾을 수 없습니다"),
     MEMBER_NOT_ADMIN(HttpStatus.FORBIDDEN, "관리자가 아닙니다"),
+    MYINFO_NOT_FOUND(HttpStatus.NOT_FOUND, "나는 정보를 찾을 수 없습니다."),
     YOURINFO_NOT_FOUND(HttpStatus.NOT_FOUND, "희망 룸메이트 정보를 찾을 수 없습니다."),
 
     // info
