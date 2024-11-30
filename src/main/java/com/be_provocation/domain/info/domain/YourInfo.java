@@ -43,7 +43,8 @@ public class YourInfo extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SleepSensitivity sleepSensitivity; // 잠귀 정도
 
-    private String department; // 학과
+    @Enumerated(EnumType.STRING)
+    private DesiredDepartment desiredDepartment; // 학과
 
     // request의 특정 값이 null일 경우 기존 값 유지
     public void update(InfoSaveRequest request) {
@@ -54,7 +55,7 @@ public class YourInfo extends BaseEntity {
         Optional.ofNullable(request.yourSleepSensitivity())
                 .ifPresent(value -> this.sleepSensitivity = SleepSensitivity.fromDisplayName(value));
         Optional.ofNullable(request.yourDepartment())
-                .ifPresent(value -> this.department = value);
+                .ifPresent(value -> this.desiredDepartment = DesiredDepartment.fromDisplayName(value));
     }
 
 }
