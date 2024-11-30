@@ -1,6 +1,7 @@
 package com.be_provocation.domain.info.dto.request;
 
 import com.be_provocation.domain.info.domain.DesiredCloseness;
+import com.be_provocation.domain.info.domain.DesiredDepartment;
 import com.be_provocation.domain.info.domain.MBTI;
 import com.be_provocation.domain.info.domain.MyInfo;
 import com.be_provocation.domain.info.domain.SleepSensitivity;
@@ -43,7 +44,7 @@ public record InfoSaveRequest(
                 .smokingStatus(SmokingStatus.fromDisplayName(yourSmokingStatus))
                 .snoringStatus(SnoringStatus.fromDisplayName(yourSnoringStatus))
                 .sleepSensitivity(SleepSensitivity.fromDisplayName(yourSleepSensitivity))
-                .department(yourDepartment)
+                .desiredDepartment(DesiredDepartment.fromDisplayName(yourDepartment))
                 .build();
     }
 }
