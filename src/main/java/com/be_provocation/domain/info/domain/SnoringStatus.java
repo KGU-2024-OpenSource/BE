@@ -7,7 +7,7 @@ import java.util.Arrays;
 public enum SnoringStatus {
     YES("O"),
     NO("X"),
-    SOMETIMES("피곤하면 가끔");
+    SOMETIMES("가끔");
 
     private final String displayName;
 
