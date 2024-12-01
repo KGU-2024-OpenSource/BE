@@ -101,6 +101,7 @@ public class InfoService {
         MyInfo roommateInfo = myInfoRepository.findById(myInfoId)
                 .orElseThrow(() -> CheckmateException.from(ErrorCode.INFO_NOT_FOUND));
         Member roommate = roommateInfo.getMember();
+        log.info("상세보기");
         return DetailResponse.of(roommate, roommateInfo);
     }
 }

@@ -17,7 +17,8 @@ public record DetailResponse(
               String sleepSensitivity,
               MBTI mbti,
               String desiredCloseness,
-              String department
+              String department,
+              String profileUrl
 
         ) {
     public static DetailResponse of (Member member, MyInfo myInfo) {
@@ -33,6 +34,7 @@ public record DetailResponse(
                 .mbti(myInfo.getMbti())
                 .desiredCloseness(myInfo.getDesiredCloseness().getDisplayName())
                 .department(myInfo.getDepartment())
+                .profileUrl(member.getProfileImageUrl())
                 .build();
     }
 }
