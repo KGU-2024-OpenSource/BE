@@ -18,8 +18,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CheckmateException.class)
-    public ApiResponse<Void> handle(CheckmateException e, HttpServletRequest request) {
-        return new ApiResponse<>(e);
+    public ResponseEntity<ApiResponse<Void>> handle(CheckmateException e, HttpServletRequest request) {
+        ErrorCode errorCode = e.getErrorCode();
+        HttpStatus status = errorCode.getStatus();
+
+        ApiResponse<Void> response = new ApiResponse<>(errorCode);
+
+        return ResponseEntity.status(status).body(response);
     }
 
     @Override
