@@ -10,6 +10,7 @@ import com.be_provocation.domain.chat.repository.ChatRoomRepository;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.global.exception.CheckmateException;
 import com.be_provocation.global.exception.ErrorCode;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
 
+    @Transactional
     public ChatMessageResDto sendMessage(ChatMessageReqDto chatMessageReqDto, CustomUserDetails userDetails) {
 
         Member sender = userDetails.getMember();
@@ -37,6 +39,7 @@ public class ChatMessageService {
         return ChatMessageResDto.fromEntity(chatMessage);
     }
 
+    @Transactional
     public List<ChatMessageResDto> getMessagesByRoom(Long roomId, CustomUserDetails userDetails) {
 
         Member member = userDetails.getMember();
@@ -50,6 +53,7 @@ public class ChatMessageService {
         return ChatMessageResDto.fromEntitieList(chatMessagesRoom);
     }
 
+    @Transactional
     public Optional<ChatMessage> getLastMessage(Long roomId) {
         return chatMessageRepository.findTopByChatRoomIdOrderByCreatedAtDesc(roomId);
     }
