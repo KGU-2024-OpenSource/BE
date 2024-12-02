@@ -21,6 +21,8 @@ public class ChatMessageResDto {
 
     private String senderName;
 
+    private String senderProfileImageUrl;
+
     private LocalDateTime createdAt;
 
     public static ChatMessageResDto fromEntity(ChatMessage chatMessage) {
@@ -28,6 +30,7 @@ public class ChatMessageResDto {
                 .roomId(chatMessage.getChatRoom().getId())
                 .senderId(chatMessage.getSender().getId())
                 .senderName(chatMessage.getSender_name())
+                .senderProfileImageUrl(chatMessage.getSender().getProfileImageUrl())
                 .message(chatMessage.getMessage())
                 .createdAt(chatMessage.getCreatedAt())
                 .build();

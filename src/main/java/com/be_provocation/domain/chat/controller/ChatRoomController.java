@@ -28,8 +28,8 @@ public class ChatRoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "채팅방 생성 API", description = "'대화 참여하기' 눌렀을 때, 채팅방을 생성하는 API입니다.")
     public ApiResponse<ChatRoomResDto> crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                 @RequestParam Long youId) {
-        return new ApiResponse<>(chatRoomService.createChatRoom(userDetails.getMember(), youId));
+                                                 @RequestParam Long roommateId) {
+        return new ApiResponse<>(chatRoomService.createChatRoom(userDetails.getMember(), roommateId));
     }
 
     @GetMapping("/list")
