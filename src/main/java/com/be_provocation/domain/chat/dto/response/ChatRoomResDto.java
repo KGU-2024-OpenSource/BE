@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ChatRoomResDto {
     private Long roomId;
+    private Long receiverId;
     private String receiverName;
     private String receiverProfileImageUrl;
     private LocalDateTime createdAt;
@@ -22,6 +23,7 @@ public class ChatRoomResDto {
     public static ChatRoomResDto fromEntity(ChatRoom savedChatRoom, Member roommate, ChatMessage chatMessage) {
         return ChatRoomResDto.builder()
                 .roomId(savedChatRoom.getId())
+                .receiverId(roommate.getId())
                 .receiverName(roommate.getNickname())
                 .receiverProfileImageUrl(roommate.getProfileImageUrl())
                 .createdAt(savedChatRoom.getCreatedAt())
