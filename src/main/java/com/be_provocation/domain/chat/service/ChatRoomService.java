@@ -6,6 +6,7 @@ import com.be_provocation.domain.chat.entity.ChatMessage;
 import com.be_provocation.domain.chat.entity.ChatParticipation;
 import com.be_provocation.domain.chat.entity.ChatRoom;
 import com.be_provocation.domain.chat.entity.RoomStatus;
+import com.be_provocation.domain.chat.repository.ChatParticipationRepository;
 import com.be_provocation.domain.chat.repository.ChatRoomRepository;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.global.exception.CheckmateException;
@@ -46,6 +47,16 @@ public class ChatRoomService {
 
         Member roommate = customUserDetailService.loadUserById(roommateId).getMember();
 
+        // 이미 해당 룸메이트와 채팅방을 만든 적이 있다면 채팅방 정보를 바로 리턴
+        List<ChatParticipation> chatParticipationList = chatParticipationService.getParticipationByMember(me);
+        for (ChatParticipation chatParticipation : chatParticipationList) {
+            if (Objects.equals(chatParticipation.getChatRoom().getParticipation().get(0).getMember().getId(), roommate.getId()) ||
+                    Objects.equals(chatParticipation.getChatRoom().getParticipation().get(1).getMember().getId(), roommate.getId())) {
+                ChatRoom existingChatRoom = chatParticipation.getChatRoom();
+                return ChatRoomResDto.fromEntity(existingChatRoom, roommate, chatMessageService.getLastMessage(existingChatRoom.getId()).orElse(null));
+            }
+
+        }
         ChatRoom chatRoom = ChatRoom.builder()
                 .status(RoomStatus.ACTIVATE)
                 .createdAt(LocalDateTime.now())

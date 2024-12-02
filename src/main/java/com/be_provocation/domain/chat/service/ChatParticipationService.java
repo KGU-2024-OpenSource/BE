@@ -16,7 +16,6 @@ import java.util.List;
 public class ChatParticipationService {
 
     private final ChatParticipationRepository chatParticipationRepository;
-    private final ChatRoomRepository chatRoomRepository;
 
     public void joinRoom(ChatRoom chatRoom, Member me, Member you) {
         ChatParticipation participation1 = chatParticipationRepository.save(ChatParticipation.builder()
