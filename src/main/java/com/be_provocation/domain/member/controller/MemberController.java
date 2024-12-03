@@ -8,6 +8,7 @@ import com.be_provocation.domain.info.dto.response.IamYouAreResponse;
 import com.be_provocation.domain.info.service.InfoService;
 import com.be_provocation.domain.member.domain.Member;
 import com.be_provocation.domain.member.dto.response.MemberResponse;
+import com.be_provocation.domain.member.dto.response.NicknameResponse;
 import com.be_provocation.domain.member.service.MemberService;
 import com.be_provocation.global.domain.SuccessCode;
 import com.be_provocation.global.dto.response.ApiResponse;
@@ -36,6 +37,12 @@ public class MemberController {
         Member member = customUserDetails.getMember();
 
         return new ApiResponse<MemberResponse>(memberService.getMyProfile(member));
+    }
+
+    @GetMapping("/nickname/{id}")
+    @Operation(summary = "닉네임 조회하기 API", description = "아이디에 해당하는 사용자의 닉네임을 반환하는 API입니다.")
+    public ApiResponse<NicknameResponse> getNickname(@PathVariable("id") Long id) {
+        return new ApiResponse<NicknameResponse>(memberService.getNickname(id));
     }
 
 }

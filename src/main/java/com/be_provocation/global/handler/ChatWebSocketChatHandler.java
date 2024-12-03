@@ -26,6 +26,7 @@ public class ChatWebSocketChatHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         Long roomId = extractRoomId(session);
         roomSessions.computeIfAbsent(roomId, key -> ConcurrentHashMap.newKeySet()).add(session);
+        log.info("WebSocket connected: Session ID = {}, Room ID = {}", session.getId(), roomId);
     }
 
     @Override
@@ -37,13 +38,14 @@ public class ChatWebSocketChatHandler extends TextWebSocketHandler {
 
         ChatMessageResDto messageResDto = mapper.readValue(payload, ChatMessageResDto.class);// JSON 페이로드 파싱
 //        messageResDto.setCreatedAt(LocalDateTime.now());
-        log.info("Parsed message: senderName={}, message={}, senderId={}, roomId={}",
-                messageResDto.getSenderName(), messageResDto.getMessage(), messageResDto.getSenderId(), messageResDto.getRoomId());
+        log.info("Parsed message: senderName={}, message={}, senderId={}, roomId={}, createdAt= {}",
+                messageResDto.getSenderName(), messageResDto.getMessage(), messageResDto.getSenderId(), messageResDto.getRoomId(), messageResDto.getCreatedAt());
 
         // 메시지 브로드캐스트
         roomSessions.get(roomId).forEach(webSocketSession -> {
             try {
                 webSocketSession.sendMessage(new TextMessage(mapper.writeValueAsString(messageResDto)));
+                log.info(messageResDto.getMessage() + "브로드캐스트 함");
             } catch (IOException e) {
                 log.error("Error sending message to session {}: {}", webSocketSession.getId(), e.getMessage());
                 throw CheckmateException.from(ErrorCode.CHAT_MESSAGE_SEND_FAILED);
@@ -55,6 +57,8 @@ public class ChatWebSocketChatHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Long roomId = extractRoomId(session);
         roomSessions.get(roomId).remove(session);
+        log.info("WebSocket disconnected: Session ID = {}, Room ID = {}, Close Status = {}", session.getId(), roomId, status);
+
     }
 
     private Long extractRoomId(WebSocketSession session) {
