@@ -24,7 +24,7 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    @PostMapping("/create")
+    @GetMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "채팅방 생성 API", description = "'대화 참여하기' 눌렀을 때, 채팅방을 생성하는 API입니다.")
     public ApiResponse<ChatRoomResDto> crateRoom(@AuthenticationPrincipal CustomUserDetails userDetails,

@@ -76,7 +76,7 @@ public class MyInfo extends BaseEntity {
     }
 
     public FilteringResponse toFilteringResponse() {
-        return new FilteringResponse(this.id, member.getNickname(), member.getProfileImageUrl(), this.mbti,
+        return new FilteringResponse(this.id, member.getId(), member.getNickname(), member.getProfileImageUrl(), this.mbti,
                 this.studentId, this.birthYear, this.department, this.desiredCloseness.getDisplayName());
     }
 

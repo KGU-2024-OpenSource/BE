@@ -3,6 +3,7 @@ package com.be_provocation.domain.chat.dto.response;
 import com.be_provocation.domain.chat.entity.ChatMessage;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ChatMessageResDto {
 
     private String senderProfileImageUrl;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     public static ChatMessageResDto fromEntity(ChatMessage chatMessage) {

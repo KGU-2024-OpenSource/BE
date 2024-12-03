@@ -36,6 +36,8 @@ public class ChatMessageService {
 
         chatRoom.addMessage(chatMessage);
 
+        log.info("채팅 새로 생성됨.");
+
         return ChatMessageResDto.fromEntity(chatMessage);
     }
 
