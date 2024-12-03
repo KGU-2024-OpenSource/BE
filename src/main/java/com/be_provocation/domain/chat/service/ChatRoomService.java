@@ -53,6 +53,7 @@ public class ChatRoomService {
             if (Objects.equals(chatParticipation.getChatRoom().getParticipation().get(0).getMember().getId(), roommate.getId()) ||
                     Objects.equals(chatParticipation.getChatRoom().getParticipation().get(1).getMember().getId(), roommate.getId())) {
                 ChatRoom existingChatRoom = chatParticipation.getChatRoom();
+                log.info("이미 존재함.");
                 return ChatRoomResDto.fromEntity(existingChatRoom, roommate, chatMessageService.getLastMessage(existingChatRoom.getId()).orElse(null));
             }
 
@@ -69,6 +70,7 @@ public class ChatRoomService {
         chatParticipationService.joinRoom(chatRoom, me, roommate);
 
         // 아직 대화를 나누지 않아서 chat 내용은 null 처리
+        log.info("새로 만들었음.");
         return ChatRoomResDto.fromEntity(savedChatRoom, roommate, null);
     }
 

@@ -4,6 +4,7 @@ import com.be_provocation.domain.info.domain.MBTI;
 
 public record FilteringResponse
         (Long myInfoId,
+         Long roommateId,
          String nickname,
          String profileImageUrl,
          MBTI mbti,
